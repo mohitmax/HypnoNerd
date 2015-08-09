@@ -9,7 +9,7 @@
 #import "BNRHypnosisViewController.h"
 #import "BNRHypnosisView.h"
 
-@interface BNRHypnosisViewController()
+@interface BNRHypnosisViewController() <UITextFieldDelegate>
 
 @property (strong, nonatomic) BNRHypnosisView *hypnosisView;
 @property (strong, nonatomic) UISegmentedControl *segmentedControl;
@@ -36,19 +36,65 @@
 - (void)loadView
 {
     [super loadView];
-//    BNRHypnosisView *backgroundView = [[BNRHypnosisView alloc] init];
-//    self.view = backgroundView;
+
+//    self.view = self.hypnosisView;
     
-    self.view = self.hypnosisView;
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    BNRHypnosisView *backgroundView = [[BNRHypnosisView alloc] initWithFrame:frame];
     
-//    self.segmentedControl = [[UISegmentedControl alloc] initWithFrame:CGRectMake(20, 100, 300, 30)];
-//    self.segmentedControl.backgroundColor = [UIColor grayColor];
-//    
-//    [self.segmentedControl insertSegmentWithTitle:@"Red" atIndex:0 animated:YES];
-//    [self.segmentedControl insertSegmentWithTitle:@"Green" atIndex:0 animated:YES];
-//    [self.segmentedControl insertSegmentWithTitle:@"Blue" atIndex:0 animated:YES];
-//    
-//    [self.hypnosisView addSubview:self.segmentedControl];
+    CGRect textFieldRect = CGRectMake(40, 70, 240, 30);
+    UITextField *textField = [[UITextField alloc] initWithFrame:textFieldRect];
+    
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.placeholder = @"Hypnotize Me";
+    textField.returnKeyType = UIReturnKeyDone;
+    textField.delegate = self;
+    [backgroundView addSubview:textField];
+    
+    self.view = backgroundView;
+    
+}
+
+- (void)drawHypnoticMessage:(NSString *)message
+{
+    for (NSInteger i = 0; i < 20; i++)
+    {
+        UILabel *messageLabel = [[UILabel alloc] init];
+        
+        messageLabel.backgroundColor = [UIColor clearColor];
+        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.text = message;
+        
+        //This method resizes the label relative to the text it is displaying.
+        [messageLabel sizeToFit];
+        
+        //Get a random X value taht fits within the hypnosis view's width
+        int width = (int)(self.view.bounds.size.width - messageLabel.bounds.size.width);
+        int x = arc4random() % width;
+        
+        //Get a random Y value that fits within the hypnosis view's height
+        int height = (int)(self.view.bounds.size.height - messageLabel.bounds.size.height);
+        int y = arc4random() % height;
+        
+        //Update the label's frame
+        CGRect frame = messageLabel.frame;
+        frame.origin = CGPointMake(x, y);
+        messageLabel.frame = frame;
+        
+        [self.view addSubview:messageLabel];
+    }
+}
+
+#pragma mark - UITextField delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self drawHypnoticMessage:textField.text];
+    
+    NSLog(@"%@", textField.text);
+    textField.text = @"";
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
