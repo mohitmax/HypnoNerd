@@ -34,7 +34,8 @@
 - (void)updateSegmentedControl
 {
     self.segControl = [[UISegmentedControl alloc] initWithItems:@[@"Red", @"Green", @"Blue"]];
-    self.segControl.frame = CGRectMake(50, 20, 300, 30);
+    self.segControl.frame = CGRectMake(50, 20, 300, 30); 
+    self.segControl.center = CGPointMake(self.center.x, 40);
     self.segControl.backgroundColor = [UIColor whiteColor];
     
     [self.segControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];

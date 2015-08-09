@@ -29,7 +29,7 @@
     if(self)
     {
         self.tabBarItem.title = @"Quiz";
-        self.tabBarItem.image = [UIImage imageNamed:@"Icon.png"];
+        self.tabBarItem.image = [UIImage imageNamed:@"Time.png"];
         
         self.questions = @[@"From what is cognac made?",
                            @"What is 7 + 7?",
